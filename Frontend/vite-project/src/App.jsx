@@ -1,11 +1,9 @@
-import CreatePage from "./pages/CreatePage";
-import ShowData from "./pages/ShowData";
+import RoutesComponent from "./routes/route"; 
 
 function App() {
   return (
     <div className="bg-zinc-800 h-full min-h-screen">
-      <CreatePage />
-      <ShowData />
+      <RoutesComponent />
     </div>
   );
 }
