@@ -1,0 +1,18 @@
+{
+  "informations": [
+    {
+      "id": 1776943119058,
+      "name": "Soumik Mallick",
+      "email": "test1@test.com",
+      "password": "dewyfguewyf",
+      "description": "asdfdfg"
+    },
+    {
+      "id": 1776943130198,
+      "name": "Soumik Mallick",
+      "email": "test1@test.hnj",
+      "password": "dewyfguewyf",
+      "description": "asdfdfg"
+    }
+  ]
+}
