@@ -1,4 +1,5 @@
 import { Search, ShoppingBag, User } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
@@ -32,9 +33,9 @@ const Navbar = () => {
             <Search className="w-[18px] h-[18px]" strokeWidth={1.8} />
           </button>
 
-          <button className="hover:text-black transition-colors">
+          <Link to="/login" className="hover:text-black transition-colors">
             <User className="w-[18px] h-[18px]" strokeWidth={1.8} />
-          </button>
+          </Link>
 
           <button className="relative hover:text-black transition-colors">
             <ShoppingBag className="w-[18px] h-[18px]" strokeWidth={1.8} />
