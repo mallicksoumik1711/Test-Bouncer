@@ -1,12 +1,12 @@
-import './App.css';
+import "./App.css";
+import Home from "./pages/Home";
 
 function App() {
-
   return (
-    <div className="text-3xl">
-      Hello
+    <div>
+      <Home />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
