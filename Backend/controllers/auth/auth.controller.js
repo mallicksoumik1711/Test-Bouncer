@@ -22,7 +22,15 @@ const register = async (req, res) => {
 
     const token = await generateToken(newUser._id);
 
-    res.status(201).json({ message: "User registered successfully", token });
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "lax",
+    });
+
+    res.status(201).json({
+      message: "User registered successfully",
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Server error" });
@@ -49,7 +57,15 @@ const login = async (req, res) => {
 
     const token = await generateToken(existingUser._id);
 
-    res.status(200).json({ message: "Login successful", token });
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "lax",
+    });
+
+    res.status(200).json({
+      message: "Login successful",
+    });
   } catch (error) {
     res.status(500).json({ message: "Server error" });
   }
