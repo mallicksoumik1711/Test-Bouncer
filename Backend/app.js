@@ -5,11 +5,19 @@ const app = express();
 const dotenv = require("dotenv");
 dotenv.config();
 
+// cors
+const cors = require("cors");
+app.use(cors({ origin: "http://localhost:3006", credentials: true }));
+
 // Connect to MongoDB
 const connectDB = require("./config/db.config");
 connectDB();
 
 app.use(express.json());
+
+// cookie parser
+const cookieParser = require("cookie-parser");
+app.use(cookieParser());
 
 // BOUNCER-Middleware
 const excludedRoutes = ["/auth/login", "/auth/register"];
