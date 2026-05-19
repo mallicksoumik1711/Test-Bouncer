@@ -33,7 +33,7 @@ app.use(async (req, res, next) => {
       headers: {
         "Content-Type": "application/json",
         "x-api-key": process.env.API_KEY,
-        Authorization: req.headers.authorization || "",
+        Authorization: req.cookies.token ? `Bearer ${req.cookies.token}` : "",
       },
       body: JSON.stringify({
         projectId: "lenalena-6kfqe2vb",
@@ -43,6 +43,8 @@ app.use(async (req, res, next) => {
     });
 
     const data = await response.json();
+
+    console.log(data);
 
     if (!data.allowed) {
       return res.status(403).json({
