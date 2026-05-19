@@ -1,6 +1,33 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const navigate = useNavigate();
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const email = e.target.email.value;
+      const password = e.target.password.value;
+
+      const response = await fetch("http://localhost:5000/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        navigate("/dashboard");
+      } else {
+        console.error(data.message);
+      }
+    } catch (error) {
+      console.error("Login failed", error);
+    }
+  };
+
   return (
     <section className="min-h-screen bg-[#f5f1ea] flex items-center justify-center px-6 py-20">
       <div className="w-full max-w-md">
@@ -20,7 +47,7 @@ const Login = () => {
         </div>
 
         {/* Form */}
-        <form className="space-y-8">
+        <form className="space-y-8" onSubmit={handleLogin}>
           <div>
             <label className="block text-sm text-zinc-600 mb-3">
               Email Address
@@ -28,6 +55,7 @@ const Login = () => {
 
             <input
               type="email"
+              name="email"
               placeholder="Enter your email"
               className="w-full bg-transparent border-b border-zinc-400 pb-4 outline-none text-zinc-900 placeholder:text-zinc-400 focus:border-zinc-900 transition"
             />
@@ -38,6 +66,7 @@ const Login = () => {
 
             <input
               type="password"
+              name="password"
               placeholder="Enter your password"
               className="w-full bg-transparent border-b border-zinc-400 pb-4 outline-none text-zinc-900 placeholder:text-zinc-400 focus:border-zinc-900 transition"
             />
