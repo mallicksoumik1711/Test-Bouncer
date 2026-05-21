@@ -1,10 +1,26 @@
-import { Search, ShoppingBag, Heart, SlidersHorizontal } from "lucide-react";
+import { useState } from "react";
+
+import {
+  Search,
+  ShoppingBag,
+  Heart,
+  SlidersHorizontal,
+} from "lucide-react";
 
 import { products, categories } from "../utils/store";
 
 import ProductCard from "../components/ProductCard";
 
 const AllProducts = () => {
+  const [activeCategory, setActiveCategory] = useState("All");
+
+  const filteredProducts =
+    activeCategory === "All"
+      ? products
+      : products.filter(
+          (product) => product.category === activeCategory
+        );
+
   return (
     <div className="min-h-screen bg-[#f5f1ea] text-zinc-900">
       {/* Navbar */}
@@ -33,7 +49,9 @@ const AllProducts = () => {
             <div className="relative cursor-pointer">
               <ShoppingBag className="w-[18px] h-[18px] text-zinc-700" />
 
-              <span className="absolute -top-2 -right-2 text-[11px]">2</span>
+              <span className="absolute -top-2 -right-2 text-[11px]">
+                2
+              </span>
             </div>
           </div>
         </div>
@@ -76,7 +94,15 @@ const AllProducts = () => {
           {categories.map((category) => (
             <button
               key={category}
-              className="px-6 py-3 border border-black/10 bg-white whitespace-nowrap text-sm hover:bg-zinc-900 hover:text-white transition"
+              onClick={() => setActiveCategory(category)}
+              className={`px-6 py-3 border whitespace-nowrap text-sm transition
+                
+                ${
+                  activeCategory === category
+                    ? "bg-zinc-900 text-white border-zinc-900"
+                    : "bg-white border-black/10 hover:bg-zinc-900 hover:text-white"
+                }
+              `}
             >
               {category}
             </button>
@@ -84,11 +110,27 @@ const AllProducts = () => {
         </div>
       </section>
 
+      {/* Product Count */}
+      <section className="max-w-7xl mx-auto px-6 lg:px-10 pb-10">
+        <div className="flex items-center justify-between">
+          <p className="text-sm text-zinc-500">
+            Showing {filteredProducts.length} products
+          </p>
+
+          <p className="text-sm text-zinc-500 hidden md:block">
+            Category: {activeCategory}
+          </p>
+        </div>
+      </section>
+
       {/* Product Grid */}
       <section className="max-w-7xl mx-auto px-6 lg:px-10 pb-24">
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-x-6 gap-y-14">
-          {products.map((product) => (
-            <ProductCard key={product.id} product={product} />
+          {filteredProducts.map((product) => (
+            <ProductCard
+              key={product.id}
+              product={product}
+            />
           ))}
         </div>
       </section>
