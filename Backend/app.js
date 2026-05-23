@@ -66,6 +66,11 @@ app.use(async (req, res, next) => {
 const authRoutes = require("./routes/auth/auth.route");
 app.use("/auth", authRoutes);
 
+// Dashboard route
+const dashboardRoute = require("./routes/FrontendRoutes/dashboard.route");
+app.use("/dashboard", dashboardRoute);
+
+
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
