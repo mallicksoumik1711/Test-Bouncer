@@ -149,7 +149,10 @@ const Dashboard = () => {
             </h2>
           </div>
 
-          <button className="hidden md:flex items-center gap-2 text-sm border-b border-zinc-900 pb-1 hover:opacity-60 transition">
+          <button
+            onClick={() => navigate("/products")}
+            className="hidden md:flex items-center gap-2 text-sm border-b border-zinc-900 pb-1 hover:opacity-60 transition"
+          >
             View All
             <ArrowRight className="w-4 h-4" />
           </button>

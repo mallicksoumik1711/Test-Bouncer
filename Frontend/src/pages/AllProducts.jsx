@@ -1,18 +1,65 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
-import { Search, ShoppingBag, Heart, SlidersHorizontal } from "lucide-react";
+import {
+  Search,
+  ShoppingBag,
+  Heart,
+  SlidersHorizontal,
+} from "lucide-react";
 
 import { products, categories } from "../utils/store";
 
 import ProductCard from "../components/ProductCard";
 
 const AllProducts = () => {
+  const navigate = useNavigate();
+
   const [activeCategory, setActiveCategory] = useState("All");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const verifyProductsAccess = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:5000/dashboard/all-products",
+          {
+            method: "GET",
+            credentials: "include",
+          }
+        );
+
+        console.log(response);
+
+        if (!response.ok) {
+          navigate("/login");
+          return;
+        }
+
+        setLoading(false);
+      } catch (error) {
+        console.error(error);
+        navigate("/login");
+      }
+    };
+
+    verifyProductsAccess();
+  }, []);
 
   const filteredProducts =
     activeCategory === "All"
       ? products
-      : products.filter((product) => product.category === activeCategory);
+      : products.filter(
+          (product) => product.category === activeCategory
+        );
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#f5f1ea] text-zinc-900 text-lg">
+        Loading products...
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#f5f1ea] text-zinc-900">
@@ -20,7 +67,10 @@ const AllProducts = () => {
       <header className="sticky top-0 z-50 border-b border-black/5 bg-[#f5f1ea]/95 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-6 lg:px-10 h-20 flex items-center justify-between gap-6">
           {/* Logo */}
-          <h1 className="text-2xl tracking-[-0.08em] font-semibold">
+          <h1
+            onClick={() => navigate("/dashboard")}
+            className="text-2xl tracking-[-0.08em] font-semibold cursor-pointer"
+          >
             lenalena
           </h1>
 
@@ -42,7 +92,9 @@ const AllProducts = () => {
             <div className="relative cursor-pointer">
               <ShoppingBag className="w-[18px] h-[18px] text-zinc-700" />
 
-              <span className="absolute -top-2 -right-2 text-[11px]">2</span>
+              <span className="absolute -top-2 -right-2 text-[11px]">
+                2
+              </span>
             </div>
           </div>
         </div>
@@ -80,20 +132,20 @@ const AllProducts = () => {
       </section>
 
       {/* Categories */}
-      <section className="max-w-7xl mx-auto px-6 lg:px-10 pb-12">
-        <div className="flex flex-wrap gap-4">
+      <section className="max-w-7xl mx-auto px-6 lg:px-10 pb-12 overflow-x-auto">
+        <div className="flex gap-4 min-w-max">
           {categories.map((category) => (
             <button
               key={category}
               onClick={() => setActiveCategory(category)}
               className={`px-6 py-3 border text-sm transition flex-shrink-0
-          
-          ${
-            activeCategory === category
-              ? "bg-zinc-900 text-white border-zinc-900"
-              : "bg-white border-black/10 hover:bg-zinc-900 hover:text-white"
-          }
-        `}
+      
+              ${
+                activeCategory === category
+                  ? "bg-zinc-900 text-white border-zinc-900"
+                  : "bg-white border-black/10 hover:bg-zinc-900 hover:text-white"
+              }
+            `}
             >
               {category}
             </button>
@@ -118,7 +170,10 @@ const AllProducts = () => {
       <section className="max-w-7xl mx-auto px-6 lg:px-10 pb-24">
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-x-6 gap-y-14">
           {filteredProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
+            <ProductCard
+              key={product.id}
+              product={product}
+            />
           ))}
         </div>
       </section>
