@@ -36,4 +36,21 @@ router.get("/all-products", async (req, res) => {
   }
 });
 
+router.get("/cart", async (req, res) => {
+  try {
+    return res.status(200).json({
+      success: true,
+      message: "Cart access granted",
+      user: {
+        authenticated: true,
+      },
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Failed to load cart",
+    });
+  }
+});
+
 module.exports = router;
