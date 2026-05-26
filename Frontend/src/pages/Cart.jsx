@@ -1,4 +1,14 @@
-import { Search, Heart, ShoppingBag, Minus, Plus, X } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+import {
+  Search,
+  Heart,
+  ShoppingBag,
+  Minus,
+  Plus,
+  X,
+} from "lucide-react";
 
 const cartItems = [
   {
@@ -20,26 +30,74 @@ const cartItems = [
 ];
 
 const Cart = () => {
+  const navigate = useNavigate();
+
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const verifyCartAccess = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:5000/dashboard/cart",
+          {
+            method: "GET",
+            credentials: "include",
+          }
+        );
+
+        console.log(response);
+
+        if (!response.ok) {
+          navigate("/login");
+          return;
+        }
+
+        setLoading(false);
+      } catch (error) {
+        console.error(error);
+        navigate("/login");
+      }
+    };
+
+    verifyCartAccess();
+  }, []);
+
   const subtotal = cartItems.reduce(
     (acc, item) => acc + item.price * item.quantity,
     0
   );
 
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-[#f5f1ea] text-zinc-900 text-lg">
+        Loading cart...
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-[#f5f1ea] text-zinc-900">
       {/* Navbar */}
-      <header className="border-b border-black/5 bg-[#f5f1ea]/95 backdrop-blur-sm sticky top-0 z-50">
+      <header className="sticky top-0 z-50 border-b border-black/5 bg-[#f5f1ea]/95 backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
-          <h1 className="text-2xl tracking-[-0.08em] font-semibold cursor-pointer">
+          {/* Logo */}
+          <h1
+            onClick={() => navigate("/dashboard")}
+            className="text-2xl tracking-[-0.08em] font-semibold cursor-pointer"
+          >
             lenalena
           </h1>
 
+          {/* Icons */}
           <div className="flex items-center gap-5 text-zinc-700">
             <Search className="w-[18px] h-[18px] cursor-pointer" />
 
             <Heart className="w-[18px] h-[18px] cursor-pointer" />
 
-            <div className="relative cursor-pointer">
+            <div
+              onClick={() => navigate("/dashboard/cart")}
+              className="relative cursor-pointer"
+            >
               <ShoppingBag className="w-[18px] h-[18px]" />
 
               <span className="absolute -top-2 -right-2 text-[11px]">
@@ -50,8 +108,9 @@ const Cart = () => {
         </div>
       </header>
 
-      {/* Page */}
+      {/* Cart Page */}
       <section className="max-w-7xl mx-auto px-6 lg:px-10 py-16">
+        {/* Heading */}
         <div className="mb-14">
           <p className="uppercase tracking-[0.25em] text-xs text-zinc-500 mb-4">
             Shopping Cart
@@ -62,15 +121,16 @@ const Cart = () => {
           </h1>
         </div>
 
+        {/* Layout */}
         <div className="grid lg:grid-cols-[1fr_420px] gap-16">
-          {/* Left */}
+          {/* Cart Items */}
           <div className="space-y-10">
             {cartItems.map((item) => (
               <div
                 key={item.id}
                 className="border-b border-black/5 pb-10 flex flex-col sm:flex-row gap-6"
               >
-                {/* Image */}
+                {/* Product Image */}
                 <div className="overflow-hidden bg-zinc-100 shrink-0">
                   <img
                     src={item.image}
@@ -79,8 +139,9 @@ const Cart = () => {
                   />
                 </div>
 
-                {/* Content */}
+                {/* Product Content */}
                 <div className="flex-1 flex flex-col justify-between">
+                  {/* Top */}
                   <div className="flex items-start justify-between gap-6">
                     <div>
                       <h2 className="text-2xl font-medium tracking-[-0.03em] mb-3">
@@ -98,6 +159,7 @@ const Cart = () => {
                     </button>
                   </div>
 
+                  {/* Bottom */}
                   <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-8 mt-10">
                     {/* Quantity */}
                     <div>
@@ -136,7 +198,7 @@ const Cart = () => {
             ))}
           </div>
 
-          {/* Right */}
+          {/* Summary */}
           <div className="h-fit sticky top-28 border border-black/5 bg-white/40 p-8">
             <div className="mb-10">
               <p className="uppercase tracking-[0.25em] text-xs text-zinc-500 mb-4">
@@ -148,6 +210,7 @@ const Cart = () => {
               </h2>
             </div>
 
+            {/* Pricing */}
             <div className="space-y-5 border-b border-black/5 pb-8">
               <div className="flex items-center justify-between text-sm">
                 <span className="text-zinc-500">Subtotal</span>
@@ -168,6 +231,7 @@ const Cart = () => {
               </div>
             </div>
 
+            {/* Total */}
             <div className="flex items-center justify-between py-8">
               <span className="text-lg font-medium">Total</span>
 
@@ -176,16 +240,36 @@ const Cart = () => {
               </span>
             </div>
 
+            {/* Buttons */}
             <button className="w-full bg-zinc-900 text-white py-4 text-sm uppercase tracking-[0.15em] hover:bg-zinc-800 transition">
               Proceed to Checkout
             </button>
 
-            <button className="w-full mt-4 border border-black/10 py-4 text-sm uppercase tracking-[0.15em] hover:bg-black/5 transition">
+            <button
+              onClick={() => navigate("/dashboard/all-products")}
+              className="w-full mt-4 border border-black/10 py-4 text-sm uppercase tracking-[0.15em] hover:bg-black/5 transition"
+            >
               Continue Shopping
             </button>
           </div>
         </div>
       </section>
+
+      {/* Footer */}
+      <footer className="border-t border-black/5">
+        <div className="max-w-7xl mx-auto px-6 lg:px-10 py-10 flex flex-col md:flex-row items-center justify-between gap-6">
+          <h1 className="text-2xl tracking-[-0.08em] font-semibold">
+            lenalena
+          </h1>
+
+          <div className="flex items-center gap-8 text-sm text-zinc-500">
+            <button>About</button>
+            <button>Shop</button>
+            <button>Contact</button>
+            <button>Support</button>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };
