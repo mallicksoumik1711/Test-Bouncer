@@ -1,7 +1,7 @@
 // Call this after user login/signup
 
 const generateToken = async (userId) => {
-  const response = await fetch("http://localhost:3000/apiauth/token", {
+  const response = await fetch("https://bouncer-u9t6.onrender.com/apiauth/token", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
