@@ -28,7 +28,7 @@ app.use(async (req, res, next) => {
   }
 
   try {
-    const response = await fetch("http://localhost:3000/validate", {
+    const response = await fetch("https://bouncer-u9t6.onrender.com/validate", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -61,7 +61,6 @@ app.use(async (req, res, next) => {
 });
 
 // Routes
-
 // Auth Routes
 const authRoutes = require("./routes/auth/auth.route");
 app.use("/auth", authRoutes);
