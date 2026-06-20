@@ -61,7 +61,6 @@ app.use(async (req, res, next) => {
 });
 
 // Routes
-
 // Auth Routes
 const authRoutes = require("./routes/auth/auth.route");
 app.use("/auth", authRoutes);
