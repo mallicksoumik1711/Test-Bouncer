@@ -8,7 +8,7 @@ const generateToken = async (userId) => {
       "x-api-key": process.env.API_KEY,
     },
     body: JSON.stringify({
-      projectId: "lenalena-6kfqe2vb",
+      projectId: "ecommerce-dkz3zqip",
       userId: userId,
     }),
   });

@@ -36,7 +36,7 @@ app.use(async (req, res, next) => {
         Authorization: req.cookies.token ? `Bearer ${req.cookies.token}` : "",
       },
       body: JSON.stringify({
-        projectId: "lenalena-6kfqe2vb",
+        projectId: "ecommerce-dkz3zqip",
         path: req.path,
         method: req.method,
       }),
